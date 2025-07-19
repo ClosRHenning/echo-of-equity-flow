@@ -52,6 +52,18 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				/* Financial market colors */
+				bull: 'hsl(var(--bull-market))',
+				bear: 'hsl(var(--bear-market))',
+				neutral: 'hsl(var(--neutral))',
+				'extreme-fear': 'hsl(var(--extreme-fear))',
+				fear: 'hsl(var(--fear))',
+				'neutral-sentiment': 'hsl(var(--neutral-sentiment))',
+				greed: 'hsl(var(--greed))',
+				'extreme-greed': 'hsl(var(--extreme-greed))',
+				'low-volatility': 'hsl(var(--low-volatility))',
+				'medium-volatility': 'hsl(var(--medium-volatility))',
+				'high-volatility': 'hsl(var(--high-volatility))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -67,6 +79,16 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-bull': 'var(--gradient-bull)',
+				'gradient-bear': 'var(--gradient-bear)',
+			},
+			boxShadow: {
+				'primary': 'var(--shadow-primary)',
+				'card-custom': 'var(--shadow-card)',
+				'glow': 'var(--glow-accent)',
 			},
 			keyframes: {
 				'accordion-down': {
