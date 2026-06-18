@@ -1,73 +1,70 @@
-# Welcome to your Lovable project
+# Synthesia Skript-Downloader
 
-## Project info
+Eine kleine Plattform, um die Skripte deiner eigenen Synthesia-Videos über die offizielle
+[Synthesia API](https://docs.synthesia.io/) abzurufen und herunterzuladen — als einzelne `.txt`-Datei
+oder gesammelt als ZIP.
 
-**URL**: https://lovable.dev/projects/ec869bd7-ec1b-4ac9-80e8-ec323c683e91
+Das Projekt besteht aus zwei Teilen:
 
-## How can I edit this code?
+- **`server/`** — ein kleiner Express-Backend, der die Synthesia API mit deinem API-Key anspricht.
+  Der Key bleibt serverseitig und landet nie im Browser oder im Frontend-Code.
+- **Frontend (`src/`)** — eine React/Vite/shadcn-UI, die Videos auflistet und Skripte anzeigt
+  bzw. herunterladen lässt.
 
-There are several ways of editing your application.
+## Voraussetzungen
 
-**Use Lovable**
+- Node.js (>= 18)
+- Ein Synthesia-API-Key (Synthesia-Konto → Settings → API)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ec869bd7-ec1b-4ac9-80e8-ec323c683e91) and start prompting.
+## Setup
 
-Changes made via Lovable will be committed automatically to this repo.
+1. **Backend konfigurieren**
 
-**Use your preferred IDE**
+   ```sh
+   cd server
+   cp .env.example .env
+   # Trage deinen SYNTHESIA_API_KEY in server/.env ein
+   npm install
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Frontend-Abhängigkeiten installieren** (im Projekt-Root)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+   ```sh
+   npm install
+   ```
 
-Follow these steps:
+3. **Beide Server gemeinsam starten** (im Projekt-Root)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+   ```sh
+   npm run dev:all
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+   Das startet das Frontend unter `http://localhost:8080` (mit Proxy für `/api` auf den Backend-Port
+   4000) und das Backend unter `http://localhost:4000`.
 
-# Step 3: Install the necessary dependencies.
-npm i
+   Alternativ getrennt in zwei Terminals: `npm run dev` (Frontend) und `npm run dev:server` (Backend).
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Funktionsweise
 
-**Edit a file directly in GitHub**
+- Das Backend ruft `GET /videos` und `GET /videos/{id}` der Synthesia API auf und extrahiert das
+  Skript aus der Antwort (verschiedene mögliche Feldnamen werden berücksichtigt, da Synthesia das
+  Skript nach der Video-Erstellung nicht in jedem Fall in der API-Antwort zurückgibt).
+- Findet sich für ein Video kein Skript in der Antwort, wird das im UI klar angezeigt, statt einen
+  Fehler zu verschleiern.
+- Im Frontend kannst du pro Video das Skript ansehen, kopieren oder als `.txt` herunterladen, oder
+  alle Videos als ZIP exportieren.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Wichtige Endpunkte (Backend)
 
-**Use GitHub Codespaces**
+| Methode | Pfad                              | Beschreibung                              |
+| ------- | ---------------------------------- | ------------------------------------------ |
+| GET     | `/api/videos`                      | Liste der Videos (Pagination via `limit`/`offset`) |
+| GET     | `/api/videos/:id`                  | Rohdaten eines Videos                      |
+| GET     | `/api/videos/:id/script`           | Extrahiertes Skript als JSON                |
+| GET     | `/api/videos/:id/script/download`  | Skript als `.txt`-Datei                     |
+| GET     | `/api/export`                      | Alle Skripte als ZIP                        |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Technologien
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ec869bd7-ec1b-4ac9-80e8-ec323c683e91) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Vite, TypeScript, React, shadcn-ui, Tailwind CSS (Frontend)
+- Express, Axios, Archiver (Backend)

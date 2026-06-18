@@ -1,7 +1,7 @@
-import { FinancialDashboard } from '@/components/FinancialDashboard';
+import { SynthesiaDashboard } from '@/components/SynthesiaDashboard';
 
 const Index = () => {
-  return <FinancialDashboard />;
+  return <SynthesiaDashboard />;
 };
 
 export default Index;
