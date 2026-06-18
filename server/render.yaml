@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: synthesia-script-server
+    runtime: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: SYNTHESIA_API_KEY
+        sync: false
+      - key: SYNTHESIA_API_BASE_URL
+        value: https://api.synthesia.io/v2
+      - key: CLIENT_ORIGIN
+        sync: false

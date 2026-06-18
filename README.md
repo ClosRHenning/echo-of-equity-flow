@@ -54,6 +54,38 @@ Das Projekt besteht aus zwei Teilen:
 - Im Frontend kannst du pro Video das Skript ansehen, kopieren oder als `.txt` herunterladen, oder
   alle Videos als ZIP exportieren.
 
+## Deployment (z.B. für Zugriff vom iPad/Handy)
+
+Damit du die App ohne lokalen Rechner nutzen kannst (z.B. vom iPad aus im Browser), hostest du
+Backend und Frontend in der Cloud. Empfehlung: **Render** für das Backend, **Vercel** für das
+Frontend (beide haben kostenlose Tarife).
+
+### 1. Backend auf Render
+
+1. Repo bei [Render](https://render.com) als neuer "Web Service" verbinden. Render erkennt die
+   Datei `server/render.yaml` automatisch (Blueprint), alternativ manuell einrichten:
+   - **Root Directory**: `server`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+2. Environment-Variablen in Render setzen:
+   - `SYNTHESIA_API_KEY` — dein Synthesia-API-Key
+   - `CLIENT_ORIGIN` — die spätere Vercel-URL deines Frontends, z.B. `https://dein-projekt.vercel.app`
+     (mehrere Origins durch Komma getrennt möglich)
+3. Nach dem Deploy hast du eine Backend-URL wie `https://synthesia-script-server.onrender.com`.
+
+### 2. Frontend auf Vercel
+
+1. Repo bei [Vercel](https://vercel.com) importieren (Framework-Preset: Vite).
+2. Environment-Variable setzen:
+   - `VITE_API_BASE_URL` = `https://synthesia-script-server.onrender.com/api` (deine Render-URL aus Schritt 1)
+3. Deployen. Die Datei `vercel.json` im Root sorgt dafür, dass das clientseitige Routing
+   (React Router) auch bei direkten Aufrufen von Unterseiten funktioniert.
+4. Die Vercel-URL kannst du dann auf dem iPad in Safari/Chrome öffnen — kein Terminal, kein
+   Node.js auf dem Gerät nötig.
+
+> Hinweis: Setze `CLIENT_ORIGIN` auf Render erst, nachdem du die finale Vercel-URL kennst, und
+> redeploye das Backend danach einmal, damit CORS die richtige Origin erlaubt.
+
 ## Wichtige Endpunkte (Backend)
 
 | Methode | Pfad                              | Beschreibung                              |

@@ -5,7 +5,7 @@ import { videosRouter } from "./routes/videos.js";
 
 const app = express();
 
-app.use(cors({ origin: config.clientOrigin }));
+app.use(cors({ origin: config.clientOrigins }));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
